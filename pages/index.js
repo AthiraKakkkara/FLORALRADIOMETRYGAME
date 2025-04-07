@@ -5,7 +5,7 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState('');
 
-  const correctAnswer = "UV - Blue"; // Change this daily
+  const correctAnswer = "UV"; // Change this daily
 
   const handleSubmit = () => {
     setSubmitted(true);
