@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Floral Radiometry Game</title>
+</head>
+<body>
+    <h1>Floral Radiometry Game</h1>
+    <p>Select the bee-perceived color:</p>
+    <select id="beeColor">
+        <option value="">--Choose--</option>
+        <option value="UV">UV</option>
+        <option value="UV Blue">UV Blue</option>
+        <option value="UV - Green">UV - Green</option>
+        <option value="Blue">Blue</option>
+        <option value="Blue - Green">Blue - Green</option>
+        <option value="Green">Green</option>
+    </select>
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="result" style="display:none; font-weight:bold;"></p>
+    <img id="flowerReward" src="/images/digital_flower.png" alt="Digital Flower" style="display:none; margin-top:1rem; width:150px;" />
+    <img id="championCard" src="/images/color_champion_card.png" alt="Color Champion Card" style="display:none; margin-top:1rem; width:250px;" />
+
+    <script>
+        const correctAnswer = "UV"; // Change daily
+        let collectedFlowers = JSON.parse(localStorage.getItem("flowers") || "[]");
+
+        function checkAnswer() {
+            const selected = document.getElementById("beeColor").value;
+            const result = document.getElementById("result");
+            const flowerImg = document.getElementById("flowerReward");
+            const cardImg = document.getElementById("championCard");
+
+            result.style.display = "block";
+            flowerImg.style.display = "none";
+            cardImg.style.display = "none";
+
+            if (!selected) {
+                result.textContent = "Please select a color!";
+                result.style.color = "red";
+                return;
+            }
+
+            if (selected === correctAnswer) {
+                result.textContent = "🎉 Correct! You earned a digital flower!";
+                result.style.color = "green";
+                flowerImg.style.display = "block";
+
+                const colors = ["Red", "Yellow", "Pink", "Purple", "Orange"];
+                const newFlower = colors[Math.floor(Math.random() * colors.length)];
+
+                if (!collectedFlowers.includes(newFlower)) {
+                    collectedFlowers.push(newFlower);
+                    localStorage.setItem("flowers", JSON.stringify(collectedFlowers));
+                }
+
+                if (collectedFlowers.length >= 5) {
+                    cardImg.style.display = "block";
+                    result.textContent += " 🏆 You unlocked the Color Champion Card!";
+                } else {
+                    result.textContent += ` 🌸 Collected: ${collectedFlowers.join(", ")}`;
+                }
+
+            } else {
+                result.textContent = "❌ Oops! Try again tomorrow!";
+                result.style.color = "orange";
+            }
+        }
+    </script>
+</body>
+</html>
